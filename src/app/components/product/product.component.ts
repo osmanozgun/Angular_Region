@@ -4,6 +4,7 @@ import { Product } from '../../models/product';
 import { ProductService } from '../../services/product.service';
 import { ActivatedRoute } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
+import { CartService } from '../../services/cart.service';
 
 @Component({
   selector: 'app-product',
@@ -19,7 +20,8 @@ export class ProductComponent implements OnInit {
 
   constructor(private productService:ProductService,
     private activatedRoute:ActivatedRoute,
-    private toastrService:ToastrService) {}
+    private toastrService:ToastrService,
+    private cartService:CartService) {}
 
   ngOnInit(): void {
     this.activatedRoute.params.subscribe(params => {
@@ -47,7 +49,13 @@ export class ProductComponent implements OnInit {
     })
   }
   addToCart(product: Product) {
-    this.toastrService.success("Sepet Eklendi",product.productName)
+    if(product.productId!=1){
+    this.toastrService.success("Sepete Eklendi",product.productName)
+    this.cartService.addToCart(product);
+    }
+    else{
+      this.toastrService.error("Hata","Bu ürün sepete eklenemez")
+    }
   }
   
 }

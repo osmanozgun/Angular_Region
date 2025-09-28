@@ -20,6 +20,9 @@ export class ProductService {
   getProductsByCategory(categoryId:number):Observable<Product[]> {
     let path2 = this.apiURL +"products/getbycategory?categoryId="+categoryId
     return this.httpClient.get<Product[]>(path2)
-    };  
+    }; 
+    add(product:Product){
+      return this.httpClient.post(this.apiURL+"products/add",product)
+    } 
 }
 
