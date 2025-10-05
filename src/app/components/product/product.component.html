@@ -1,35 +1,55 @@
 <div *ngIf="dataloaded==false" class="spinner-border text-info" role="status">
   <span class="visually-hidden">Loading...</span>
 </div>
-<div class="mb-3">
-  <label for="filterText" class="form-label">Ürün Ara</label>
-  <input type="text" [(ngModel)]="filterText" class="form-control" id="filterText" placeholder="Aranacak Ürünü Giriniz">
+
+<div class="mb-3 d-flex justify-content-center align-items-center">
+  <!-- Arama kutusu -->
+  <input 
+    type="text" 
+    [(ngModel)]="filterText" 
+    class="form-control w-50 me-3 text-center" 
+    id="filterText" 
+    placeholder="Aranacak Ürünü Giriniz">
+
+  <!-- Ürün sayısı kutusu -->
+  <div *ngIf="filterText.length >= 0" class="form-control w-25 text-center bg-warning fw-bold">
+    {{ (products | filterPipe:filterText).length }} {{ filterText.length > 0 ? " ürün bulundu" : 'ürün listelendi' }}
+  </div>
 </div>
-<div *ngIf="filterText.length>2" class="alert alert-warning">
-{{filterText}} aradiniz
-</div>
-<table *ngIf="dataloaded == true" class="table">
+
+<ng-container *ngIf="products | filterPipe:filterText as filteredProducts">
+  <table class="table table-striped align-middle">
     <thead>
-        <tr>
-            <th>Id</th>
-            <th>Ürün Adı</th>
-            <th>Kategori</th>
-            <th>Fiyat</th>
-            <th>Kdv'li Fiyat</th>
-            <th>Stok Adedi</th>
-            <th></th>
-        </tr>
+      <tr>
+        <th>Resim</th>
+        <th>Ürün Adı</th>      
+        <th>Fiyat</th>
+        <th>Stok Adedi</th>
+        <th></th>
+      </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let product of products | filterPipe:filterText">
-          <td>{{product.productId}}</td>
-          <td>{{product.productName | uppercase}}</td>
-          <td>{{product.categoryId}}</td>
-          <td>{{product.unitPrice}}</td>
-          <td>{{product.unitPrice | vatAdded:50 | currency }}</td>
-          <td>{{product.unitsInStock}}</td>
-          <td><button (click)="addToCart(product)" class="btn btn-success">Sepete Ekle</button></td>
+      <tr *ngFor="let product of filteredProducts">
+        <!-- Ürün resmi -->
+        <td>
+          <img 
+            [src]="getProductImages(product.productName)" 
+            alt="{{ product.productName }}" 
+            width="80" 
+            height="80" 
+            class="img-thumbnail">
+        </td>
+
+        
+        <td>{{ product.productName | uppercase }}</td>
+        
+        <td>{{ product.unitPrice | number:'1.0-0' }} TL</td>
+        
+        <td>{{ product.unitsInStock }}</td>
+        <td>
+          <button (click)="addToCart(product)" class="btn btn-success">Sepete Ekle</button>
+        </td>
       </tr>
     </tbody>
-    
-</table>
+  </table>
+</ng-container>

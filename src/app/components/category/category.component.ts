@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { Category } from '../../models/category';
 import { CategoryService } from '../../services/category.service';
+import { CategoryCleanService } from '../../services/categoryclean.service';
 
 @Component({
   selector: 'app-category',
@@ -11,11 +12,15 @@ export class CategoryComponent implements OnInit  {
 
 categories :  Category[] = []; 
 currentcategory:Category | null = null;
-flag:boolean;
-constructor(private categoryService:CategoryService) {}
+constructor(private categoryService:CategoryService,
+  private categoryCleanService:CategoryCleanService
+) {}
 
   ngOnInit(): void {
     this.getCategories();
+    this.categoryCleanService.clearCategory$.subscribe(() => {
+    this.clean(); // currentcategory = null
+  });
   }
   getCategories()
   {
@@ -31,7 +36,6 @@ constructor(private categoryService:CategoryService) {}
   {
     if(category == this.currentcategory)
     {
-      this.flag=true;
       return "list-group-item active"
     }
     else return "list-group-item"

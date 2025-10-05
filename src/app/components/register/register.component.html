@@ -1,0 +1,43 @@
+<div class="d-flex align-items-center justify-content-center bg-body-tertiary" style="min-height: 100vh;">
+  <main class="form-signin w-100 m-auto">
+    <form [formGroup]="registerForm">
+      <h1 class="h3 mb-3 fw-normal">Kayıt Ol</h1>
+       <div class="form-floating mb-2">
+        <input formControlName="FirstName" 
+               type="text"
+               class="form-control" 
+               id="floatingInput"
+               placeholder="name@example.com"> 
+        <label for="floatingInput">İsim</label>
+      </div>
+      <div class="form-floating mb-2">
+        <input formControlName="LastName" 
+               type="text"
+               class="form-control" 
+               id="floatingInput"
+               placeholder="name@example.com"> 
+        <label for="floatingInput">Soyisim</label>
+      </div> 
+      <div class="form-floating mb-2">
+        <input formControlName="Email" 
+               type="email" 
+               class="form-control" 
+               id="floatingInput"
+               placeholder="name@example.com"> 
+        <label for="floatingInput">E Posta</label>
+      </div>
+
+      <div class="form-floating mb-2">
+        <input formControlName="Password" 
+               type="password" 
+               class="form-control" 
+               id="floatingPassword"
+               placeholder="Password"> 
+        <label for="floatingPassword">Parola</label>
+      </div>
+      <!-- Giriş Yap -->
+      <button type="button" class="btn btn-primary w-100 py-2 mb-2" (click)="register()">Kayıt Ol</button>
+      <p class="mt-5 mb-3 text-body-secondary">&copy; 2017–2025</p>
+    </form>
+  </main>
+</div>

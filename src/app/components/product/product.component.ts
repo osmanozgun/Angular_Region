@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { Product } from '../../models/product';
-
 import { ProductService } from '../../services/product.service';
 import { ActivatedRoute } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { CartService } from '../../services/cart.service';
+import { GetImageService } from '../../services/get-image.service';
 
 @Component({
   selector: 'app-product',
@@ -13,49 +13,53 @@ import { CartService } from '../../services/cart.service';
 })
 export class ProductComponent implements OnInit {
 
-
   products: Product[] = [];
-  dataloaded=false;
-  filterText="";
+  dataloaded = false;
+  filterText = "";
 
-  constructor(private productService:ProductService,
-    private activatedRoute:ActivatedRoute,
-    private toastrService:ToastrService,
-    private cartService:CartService) {}
+  constructor(
+    private productService: ProductService,
+    private activatedRoute: ActivatedRoute,
+    private toastrService: ToastrService,
+    private cartService: CartService,
+    private productImageService: GetImageService
+  ) {}
 
   ngOnInit(): void {
     this.activatedRoute.params.subscribe(params => {
-      if(params["categoryId"])
-      {
-        this.getProductsByCategory(params["categoryId"])
+      if (params["categoryId"]) {
+        this.getProductsByCategory(params["categoryId"]);
+      } else {
+        this.getProducts();
       }
-      else{
-        this.getProducts()
-      }
-    })
-    }
-  getProducts()
-  {
-    this.productService.getProducts().subscribe(response =>{
-      this.products = response;
-      this.dataloaded =true;
-    })
+    });
   }
-  getProductsByCategory(categordId:number)
-  {
-    this.productService.getProductsByCategory(categordId).subscribe(response =>{
+
+  getProducts() {
+    this.productService.getProducts().subscribe(response => {
       this.products = response;
-      this.dataloaded =true;
-    })
+      this.dataloaded = true;
+    });
   }
+
+  getProductsByCategory(categoryId: number) {
+    this.productService.getProductsByCategory(categoryId).subscribe(response => {
+      this.products = response;
+      this.dataloaded = true;
+    });
+  }
+
   addToCart(product: Product) {
-    if(product.productId!=1){
-    this.toastrService.success("Sepete Eklendi",product.productName)
-    this.cartService.addToCart(product);
+    if (product.unitsInStock > 0) {
+      this.toastrService.success("Sepete Eklendi", product.productName);
+      this.cartService.addToCart(product);
+    } else {
+      this.toastrService.error("Hata", "Bu ürün sepete eklenemez");
     }
-    else{
-      this.toastrService.error("Hata","Bu ürün sepete eklenemez")
-    }
+    
   }
-  
+
+  getProductImages(productName: string): string {
+    return this.productImageService.getProductImage(productName);
+  }
 }

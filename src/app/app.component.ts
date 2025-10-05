@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-root',
@@ -7,5 +8,9 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'northwind';
-  user: string = "osman";
+  constructor(private router: Router) {}
+
+  isAuthPage(): boolean {
+    return this.router.url === '/login' || this.router.url === '/' || this.router.url === '/register';
+  }
 }

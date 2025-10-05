@@ -1,28 +1,97 @@
-<nav class="navbar navbar-expand-lg bg-body-tertiary">
-  <div class="container-fluid">
-    <a class="navbar-brand" href="#">Navbar</a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-        <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="#">Home</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">Link</a>
-        </li>
-        <app-cart-summary>
-          
-        </app-cart-summary>
-        <li class="nav-item">
-          <a class="nav-link disabled" aria-disabled="true">Disabled</a>
-        </li>
-      </ul>
-      <form class="d-flex" role="search">
-        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search"/>
-        <button class="btn btn-outline-success" type="submit">Search</button>
-      </form>
+<nav class="navbar navbar-expand-lg bg-body-tertiary shadow-sm">
+  <div class="container d-flex justify-content-between align-items-center">
+
+    <!-- Sol taraf: Anasayfa -->
+    <a class="navbar-brand fw-bold fs-5" routerLink="/products" (click)="navbarClean()">Teknoloji Market</a>
+
+    <!-- Sağ taraf: Hesabım + Sepetim -->
+    <div class="d-flex align-items-center gap-2">
+
+      <!-- Hesabım Dropdown -->
+      <div class="dropdown">
+        <button class="btn btn-light border rounded-3 px-3 d-flex align-items-center dropdown-toggle" 
+                type="button" data-bs-toggle="dropdown" aria-expanded="false">
+          <i class="bi bi-person fs-5 me-2"></i>
+          <div class="text-start">
+            <div class="fw-bold">Hesabım</div>
+            <small *ngIf="isLoggedIn()">{{ getUserFullName() }}</small>
+            <small *ngIf="!isLoggedIn()">Misafir</small>
+          </div>
+        </button>
+        <ul class="dropdown-menu dropdown-menu-end">
+          <li *ngIf="isLoggedIn()">
+            <a class="dropdown-item" routerLink="/orders">Siparişlerim</a>
+            <a class="dropdown-item" routerLink="/profile">Kullanıcı Bilgilerim</a>
+            <hr class="dropdown-divider">
+            <a class="dropdown-item text-danger" (click)="logout()">Çıkış Yap</a>
+          </li>
+          <li *ngIf="!isLoggedIn()">
+            <a class="dropdown-item" routerLink="/login">Giriş Yap</a>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Sepetim Dropdown -->
+      <div class="dropdown">
+        <button class="btn btn-secondary border rounded-3 px-3 position-relative dropdown-toggle" 
+                type="button" data-bs-toggle="dropdown" aria-expanded="false">
+          <i class="bi bi-cart2 fs-5 me-2"></i>
+          <strong>Sepetim</strong>
+          <span class="badge bg-light text-dark rounded-circle position-absolute top-0 start-100 translate-middle">
+            {{ cartItems?.length || 0 }}
+          </span>
+        </button>
+
+        <ul class="dropdown-menu dropdown-menu-end p-3" style="min-width: 360px;">
+          <!-- Boş sepet durumu -->
+          <li *ngIf="cartItems.length === 0" class="text-center text-muted py-2">
+            Sepetiniz boş
+          </li>
+
+          <!-- Ürün listesi -->
+          <li *ngFor="let item of cartItems" class="dropdown-item d-flex align-items-center py-2 border-bottom">
+            <!-- Ürün resmi -->
+            <img 
+              [src]="getCartItemImage(item.product.productName)" 
+              alt="{{ item.product.productName }}" 
+              class="rounded me-3"
+              style="width: 50px; height: 50px; object-fit: cover;"
+            />
+
+            <!-- Ürün bilgileri -->
+            <div class="flex-grow-1">
+              <div class="fw-semibold">{{ item.product.productName }}</div>
+              <div class="text-muted small">
+                {{ item.product.unitPrice | number:'1.0-0' }} TL
+              </div>
+              <!-- Adet kontrol -->
+              <div class="d-flex align-items-center mt-1">
+                <button class="btn btn-sm btn-outline-secondary px-2 py-0" (click)="decreaseQuantity(item)">
+                  <i class="bi bi-dash"></i>
+                </button>
+                <span class="mx-2">{{ item.quantity }}</span>
+                <button class="btn btn-sm btn-outline-secondary px-2 py-0" (click)="increaseQuantity(item)">
+                  <i class="bi bi-plus"></i>
+                </button>
+              </div>
+            </div>
+
+            <!-- Silme butonu -->
+            <button class="btn btn-sm btn-outline-danger ms-2" (click)="removeFromCart(item)">
+              <i class="bi bi-trash"></i>
+            </button>
+          </li>
+
+          <!-- Alt kısım: toplam -->
+          <li *ngIf="cartItems.length > 0" class="pt-2">
+            <div class="d-flex justify-content-between align-items-center px-2">
+              <strong>Toplam:</strong>
+              <span class="fw-semibold">{{ getTotalPrice() | number:'1.0-0' }} TL</span>
+            </div>
+            <a routerLink="/cart" class="btn btn-primary btn-sm w-100 mt-2">Sepete Git</a>
+          </li>
+        </ul>
+      </div>
     </div>
   </div>
 </nav>
