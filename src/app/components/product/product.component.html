@@ -1,53 +1,44 @@
-<div *ngIf="dataloaded==false" class="spinner-border text-info" role="status">
-  <span class="visually-hidden">Loading...</span>
-</div>
-
-<div class="mb-3 d-flex justify-content-center align-items-center">
-  <!-- Arama kutusu -->
-  <input 
-    type="text" 
-    [(ngModel)]="filterText" 
-    class="form-control w-50 me-3 text-center" 
-    id="filterText" 
-    placeholder="Aranacak Ürünü Giriniz">
-
-  <!-- Ürün sayısı kutusu -->
-  <div *ngIf="filterText.length >= 0" class="form-control w-25 text-center bg-warning fw-bold">
-    {{ (products | filterPipe:filterText).length }} {{ filterText.length > 0 ? " ürün bulundu" : 'ürün listelendi' }}
+<div *ngIf="dataloaded==false" class="text-center">
+  <div class="spinner-border text-info" role="status">
+    <span class="visually-hidden">Loading...</span>
   </div>
 </div>
 
-<ng-container *ngIf="products | filterPipe:filterText as filteredProducts">
+<div class="mb-3 d-flex justify-content-center align-items-center">
+  <input type="text" [(ngModel)]="filterText" class="form-control w-50 me-3 text-center" placeholder="Aranacak Ürünü Giriniz">
+  <div class="form-control w-25 text-center bg-warning fw-bold">
+    {{ (products | filterPipe:filterText).length }} 
+    {{ filterText.length > 0 ? ' ürün bulundu' : 'ürün listelendi' }}
+  </div>
+</div>
+
+<ng-container *ngIf="products | filterPipe:filterText as filteredProducts" >
   <table class="table table-striped align-middle">
     <thead>
       <tr>
         <th>Resim</th>
-        <th>Ürün Adı</th>      
+        <th>Ürün Adı</th>
         <th>Fiyat</th>
         <th>Stok Adedi</th>
         <th></th>
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let product of filteredProducts">
-        <!-- Ürün resmi -->
+      <tr *ngFor="let product of filteredProducts" (click)="onSelectProduct(product)">
         <td>
-          <img 
-            [src]="getProductImages(product.productName)" 
-            alt="{{ product.productName }}" 
-            width="80" 
-            height="80" 
-            class="img-thumbnail">
+          <img [src]="getProductImages(product.productName)" alt="{{ product.productName }}" width="80" height="80" class="img-thumbnail">
         </td>
-
-        
-        <td>{{ product.productName | uppercase }}</td>
-        
+        <td>{{ product.productName }}</td>
         <td>{{ product.unitPrice | number:'1.0-0' }} TL</td>
-        
         <td>{{ product.unitsInStock }}</td>
         <td>
-          <button (click)="addToCart(product)" class="btn btn-success">Sepete Ekle</button>
+          <ng-container *ngIf="isManagerPage; else normalPage">
+            
+            <button (click)="deleteProduct(product)" class="btn btn-danger btn-sm">Sil</button>
+          </ng-container>
+          <ng-template #normalPage>
+            <button (click)="addToCart(product)" class="btn btn-success btn-sm">Sepete Ekle</button>
+          </ng-template>
         </td>
       </tr>
     </tbody>

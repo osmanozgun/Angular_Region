@@ -13,4 +13,9 @@ export class AppComponent {
   isAuthPage(): boolean {
     return this.router.url === '/login' || this.router.url === '/' || this.router.url === '/register';
   }
+  isCategoryVisible(): boolean {
+  const hideFor = ['/sepet']; // Category gizlenecek sayfalar
+  return !hideFor.includes(this.router.url);
+}
+
 }

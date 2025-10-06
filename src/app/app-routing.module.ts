@@ -5,14 +5,16 @@ import { CategoryComponent } from './components/category/category.component';
 import { ProductAddComponent } from './components/product-add/product-add.component';
 import { LoginComponent } from './components/login/login.component';
 import { RegisterComponent } from './components/register/register.component';
+import { SepetComponent } from './components/sepet/sepet.component';
 
 const routes: Routes = [
   {path:"", pathMatch:"full", component:LoginComponent},
   {path:"products", component:ProductComponent},
-  {path:"products/add", component:ProductAddComponent},
+  {path:"products/manager", component:ProductAddComponent},
   {path:"products/category/:categoryId", component:ProductComponent},
   {path:"login", component:LoginComponent},
-  {path:"register", component:RegisterComponent}
+  {path:"register", component:RegisterComponent},
+  {path:"sepet", component:SepetComponent}
 ];
 
 @NgModule({

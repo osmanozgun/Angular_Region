@@ -25,6 +25,9 @@ export class NaviComponent implements OnInit {
 
   ngOnInit(): void {
     this.getCartItems();
+    this.cartService.cart$.subscribe(items => {
+    this.cartItems = items;
+  });
   }
   navbarClean() {
   this.categoryCleanService.clean();
@@ -56,9 +59,11 @@ export class NaviComponent implements OnInit {
   }
 
   removeFromCart(cartItem: CartItem) {
-    this.cartService.removeFormCart(cartItem.product);
-    this.toastr.error(cartItem.product.productName + ' sepetten silindi');
-  }
+  this.cartService.removeFromCart(cartItem.product);
+  this.toastr.error(`${cartItem.product.productName} sepetten silindi`);
+  this.cartItems = this.cartService.list(); // UI’yi güncelle
+}
+
 
   increaseQuantity(cartItem: any) {
     cartItem.quantity += 1;

@@ -6,7 +6,7 @@
 
     <!-- Sağ taraf: Hesabım + Sepetim -->
     <div class="d-flex align-items-center gap-2">
-
+      <a class="navbar-brand fw-bold fs-5" routerLink="/products/manager">Ürün Yönetimi</a>
       <!-- Hesabım Dropdown -->
       <div class="dropdown">
         <button class="btn btn-light border rounded-3 px-3 d-flex align-items-center dropdown-toggle" 
@@ -34,7 +34,7 @@
       <!-- Sepetim Dropdown -->
       <div class="dropdown">
         <button class="btn btn-secondary border rounded-3 px-3 position-relative dropdown-toggle" 
-                type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                type="button" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
           <i class="bi bi-cart2 fs-5 me-2"></i>
           <strong>Sepetim</strong>
           <span class="badge bg-light text-dark rounded-circle position-absolute top-0 start-100 translate-middle">
@@ -88,7 +88,7 @@
               <strong>Toplam:</strong>
               <span class="fw-semibold">{{ getTotalPrice() | number:'1.0-0' }} TL</span>
             </div>
-            <a routerLink="/cart" class="btn btn-primary btn-sm w-100 mt-2">Sepete Git</a>
+            <a routerLink="/cart" class="btn btn-primary btn-sm w-100 mt-2" routerLink="/sepet">Sepete Git</a>
           </li>
         </ul>
       </div>

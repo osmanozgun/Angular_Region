@@ -1,1 +1,66 @@
-<p>sepet works!</p>
+<div class="container my-4">
+  <div class="row">
+    <!-- Sepet Ürünleri -->
+    <div class="col-lg-8">
+      <h3>Sepetiniz</h3>
+      <div *ngIf="cartItems.length === 0" class="text-center text-muted py-4">
+        Sepetiniz boş
+      </div>
+
+      <div *ngFor="let item of cartItems" class="card mb-3">
+        <div class="row g-0 align-items-center">
+          <div class="col-md-2">
+            <img [src]="getCartItemImage(item.product.productName)" 
+                 class="img-fluid rounded-start" 
+                 alt="{{item.product.productName}}">
+          </div>
+          <div class="col-md-6">
+            <div class="card-body">
+              <h5 class="card-title">{{ item.product.productName }}</h5>
+              <p class="card-text text-muted">{{ item.product.unitPrice | number:'1.0-0' }} TL</p>
+            </div>
+          </div>
+          <div class="col-md-2 d-flex align-items-center">
+            <button class="btn btn-sm btn-outline-secondary me-2" (click)="decreaseQuantity(item)">-</button>
+            <span>{{ item.quantity }}</span>
+            <button class="btn btn-sm btn-outline-secondary ms-2" (click)="increaseQuantity(item)">+</button>
+          </div>
+          <div class="col-md-2 d-flex align-items-center">
+            <button class="btn btn-sm btn-outline-danger" (click)="removeFromCart(item)">
+              <i class="bi bi-trash"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div *ngIf="cartItems.length > 0" class="mt-3 d-flex justify-content-between align-items-center">
+        <h1><strong>Toplam: <span class="fw-bold">{{ getTotalPrice() | number:'1.0-0' }} TL</span></strong></h1>
+        
+      </div>
+    </div>
+
+    <!-- Adres Formu -->
+    <div class="col-lg-4">
+      <h3>Adres Bilgileri</h3>
+      <form (ngSubmit)="submitAddress()" #addressForm="ngForm">
+        <div class="mb-3">
+          <label for="name" class="form-label">Ad Soyad</label>
+          <input type="text" id="name" class="form-control" required [(ngModel)]="orderdata.name" name="name">
+        </div>
+        <div class="mb-3">
+          <label for="adres" class="form-label">Adres</label>
+          <input type="text" id="adres" class="form-control" required [(ngModel)]="orderdata.adres" name="adres">
+        </div>
+        <div class="mb-3">
+          <label for="city" class="form-label">Şehir</label>
+          <input type="text" id="city" class="form-control" required [(ngModel)]="orderdata.city" name="city">
+        </div>
+        <div class="mb-3">
+          <label for="code" class="form-label">Posta Kodu</label>
+          <input type="text" id="code" class="form-control" required [(ngModel)]="orderdata.code" name="code">
+        </div>
+        <button type="submit" class="btn btn-primary w-100" [disabled]="cartItems.length === 0">Siparişi Tamamla</button>
+      </form>
+    </div>
+  </div>
+</div>
