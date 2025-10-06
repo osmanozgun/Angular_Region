@@ -1,61 +1,155 @@
-.btn-cart {
-  background-color: #9b9b9b;
-  color: white;
-  border: none;
-  border-radius: 8px;
-  padding: 10px 20px;
-  font-weight: 500;
-}
-
-.btn-cart:hover {
-  background-color: #808080;
-}
-
-.btn-cart .badge {
-  font-size: 0.75rem;
-  width: 20px;
-  height: 20px;
+/* ============================== */
+/* 1. GENEL BUTON STİLLERİ */
+/* ============================== */
+.btn-light,
+.btn-cart,
+.admin-btn {
+  height: 56px;
+  min-width: 160px;
+  border-radius: 12px;
+  font-weight: 600;
   display: flex;
   align-items: center;
   justify-content: center;
-}
-.btn-cart {
-  background-color: #9b9b9b;
-  color: white;
-  border: none;
-  border-radius: 8px;
-  padding: 8px 18px;
-  font-weight: 500;
-  transition: background-color 0.2s ease;
+  transition: all 0.3s ease;
 }
 
-.btn-cart:hover {
-  background-color: #808080;
-}
-
-.btn-cart .badge {
-  font-size: 0.75rem;
-  width: 20px;
-  height: 20px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.nav-link.active {
-  color: #000;
-  text-decoration: none;
-}
-
-.nav-link.active:hover {
-  color: #007bff;
-}
-.btn-light, .btn-secondary {
-  min-width: 150px;
-  text-align: left;
-}
-
+.btn-light:hover,
 .btn-cart:hover,
+.admin-btn:hover {
+  transform: translateY(-1px);
+}
+
+/* ============================== */
+/* 2. HESABIM BUTONU */
+/* ============================== */
+.btn-light {
+  background-color: #fff;
+  border: 1px solid #dee2e6;
+  color: #212529;
+}
+
 .btn-light:hover {
-  background-color: #e9ecef !important;
+  background-color: #e9ecef;
+  border-color: #0d6efd;
+  color: #0d6efd;
+}
+
+/* ============================== */
+/* 3. ÜRÜN YÖNETİMİ BUTONU */
+/* ============================== */
+.admin-btn {
+  background-color: #fff;
+  border: 1px solid #dee2e6;
+  color: #0d6efd;
+}
+
+.admin-btn i {
+  color: #0d6efd;
+}
+
+.admin-btn:hover {
+  background-color: #e9f2ff;
+  border-color: #0a58ca;
+  color: #0a58ca;
+}
+
+.admin-btn:hover i {
+  color: #0a58ca;
+}
+
+/* ============================== */
+/* 4. SEPET BUTONU */
+/* ============================== */
+.btn-cart {
+  position: relative;
+  background-color: #fff;
+  color: #0d6efd;
+  border: 1px solid #dee2e6;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.btn-cart:hover {
+  background-color: #e7f1ff;
+  color: #0a58ca;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+}
+
+.btn-cart .badge {
+  position: absolute;
+  top: 6px;
+  right: 10px;
+  width: 20px;
+  height: 20px;
+  background-color: #ffc107;
+  color: #212529;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ============================== */
+/* 5. DROPDOWN MENÜLER */
+/* ============================== */
+.dropdown-menu {
+  border-radius: 12px;
+  padding: 0.5rem 0;
+  min-width: 0;
+  width: max-content;  /* Buton genişliği kadar */
+  right: 0;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+  border: none;
+}
+
+.dropdown-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  transition: background 0.2s;
+}
+
+.dropdown-item:hover {
+  background-color: #e9ecef;
+}
+
+.dropdown-item img {
+  width: 60px;
+  height: 60px;
+  object-fit: cover;
+  border-radius: 6px;
+  border: 1px solid #dee2e6;
+}
+
+.dropdown-item .flex-grow-1 {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.dropdown-item .product-name {
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-align: center;
+}
+
+.dropdown-item .product-price {
+  font-size: 0.75rem;
+  color: #6c757d;
+  text-align: center;
+}
+
+.dropdown-item .btn-qty,
+.dropdown-item .btn-trash {
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.85rem;
+  border-radius: 6px;
+  padding: 0;
 }

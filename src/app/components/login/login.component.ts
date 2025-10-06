@@ -36,6 +36,7 @@ export class LoginComponent implements OnInit {
 
       this.authService.login(loginModel).subscribe({
         next: (response) => {
+          console.log(localStorage.getItem("adminpermission"));
           this.toastr.success(
         `<i class="bi bi-check-circle-fill"></i> Giriş Başarılı`,
         '', 
@@ -46,7 +47,9 @@ export class LoginComponent implements OnInit {
           timeOut: 2500,     // 3 saniye sonra kaybolur
           toastClass: 'ngx-toastr toast-success-custom' // opsiyonel özel stil
         }
-        );      
+        
+        );
+          localStorage.setItem("adminpermission", response.adminpermission);      
           localStorage.setItem("token", response.token);
           localStorage.setItem("firstName", response.firstName);
           localStorage.setItem("lastName", response.lastname); // backend "lastname"

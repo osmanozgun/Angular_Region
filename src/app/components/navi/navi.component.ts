@@ -27,6 +27,7 @@ export class NaviComponent implements OnInit {
     this.getCartItems();
     this.cartService.cart$.subscribe(items => {
     this.cartItems = items;
+    this.isAdminIn()
   });
   }
   navbarClean() {
@@ -37,6 +38,12 @@ export class NaviComponent implements OnInit {
   isLoggedIn(): boolean {
     return !!localStorage.getItem('token');
   }
+ isAdminIn(): boolean {
+  const val = localStorage.getItem('adminpermission');
+  return val === 'true' || val === '1';
+}
+
+
 
   getUserFullName(): string {
     const firstName = localStorage.getItem('firstName') || '';
@@ -45,6 +52,7 @@ export class NaviComponent implements OnInit {
   }
 
   logout() {
+    this.cartService.clearCart();
     localStorage.removeItem('token');
     localStorage.removeItem('firstName');
     localStorage.removeItem('lastName');

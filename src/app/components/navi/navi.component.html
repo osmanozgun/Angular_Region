@@ -4,13 +4,22 @@
     <!-- Sol taraf: Anasayfa -->
     <a class="navbar-brand fw-bold fs-5" routerLink="/products" (click)="navbarClean()">Teknoloji Market</a>
 
-    <!-- Sağ taraf: Hesabım + Sepetim -->
+    <!-- Sağ taraf: Hesabım + Sepetim + Admin -->
     <div class="d-flex align-items-center gap-2">
-      <a class="navbar-brand fw-bold fs-5" routerLink="/products/manager">Ürün Yönetimi</a>
+
+      <!-- Ürün Yönetimi (Admin) -->
+      <a *ngIf="isAdminIn()" class="btn admin-btn d-flex align-items-center" routerLink="/products/manager">
+        <i class="bi bi-gear fs-5 me-2"></i>
+        <div class="text-start">
+          <div class="fw-bold">Ürün Yönetimi</div>
+          <small class="text-muted">Yönetici</small>
+        </div>
+      </a>
+
       <!-- Hesabım Dropdown -->
       <div class="dropdown">
-        <button class="btn btn-light border rounded-3 px-3 d-flex align-items-center dropdown-toggle" 
-                type="button" data-bs-toggle="dropdown" aria-expanded="false">
+        <button class="btn btn-light dropdown-toggle d-flex align-items-center" type="button"
+          data-bs-toggle="dropdown" aria-expanded="false">
           <i class="bi bi-person fs-5 me-2"></i>
           <div class="text-start">
             <div class="fw-bold">Hesabım</div>
@@ -18,7 +27,7 @@
             <small *ngIf="!isLoggedIn()">Misafir</small>
           </div>
         </button>
-        <ul class="dropdown-menu dropdown-menu-end">
+        <ul class="dropdown-menu dropdown-menu-end p-2">
           <li *ngIf="isLoggedIn()">
             <a class="dropdown-item" routerLink="/orders">Siparişlerim</a>
             <a class="dropdown-item" routerLink="/profile">Kullanıcı Bilgilerim</a>
@@ -33,65 +42,52 @@
 
       <!-- Sepetim Dropdown -->
       <div class="dropdown">
-        <button class="btn btn-secondary border rounded-3 px-3 position-relative dropdown-toggle" 
-                type="button" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
+        <button class="btn btn-cart position-relative dropdown-toggle" type="button"
+          data-bs-toggle="dropdown" aria-expanded="false">
           <i class="bi bi-cart2 fs-5 me-2"></i>
           <strong>Sepetim</strong>
-          <span class="badge bg-light text-dark rounded-circle position-absolute top-0 start-100 translate-middle">
-            {{ cartItems?.length || 0 }}
-          </span>
+          <span class="badge">{{ cartItems?.length || 0 }}</span>
         </button>
 
-        <ul class="dropdown-menu dropdown-menu-end p-3" style="min-width: 360px;">
-          <!-- Boş sepet durumu -->
-          <li *ngIf="cartItems.length === 0" class="text-center text-muted py-2">
+        <ul class="dropdown-menu dropdown-menu-end p-3 shadow" style="min-width: 380px;" (click)="$event.stopPropagation()">
+          <!-- Boş sepet -->
+          <li *ngIf="cartItems.length === 0" class="text-center text-muted py-4">
             Sepetiniz boş
           </li>
 
           <!-- Ürün listesi -->
-          <li *ngFor="let item of cartItems" class="dropdown-item d-flex align-items-center py-2 border-bottom">
-            <!-- Ürün resmi -->
-            <img 
-              [src]="getCartItemImage(item.product.productName)" 
-              alt="{{ item.product.productName }}" 
-              class="rounded me-3"
-              style="width: 50px; height: 50px; object-fit: cover;"
-            />
-
-            <!-- Ürün bilgileri -->
-            <div class="flex-grow-1">
-              <div class="fw-semibold">{{ item.product.productName }}</div>
-              <div class="text-muted small">
-                {{ item.product.unitPrice | number:'1.0-0' }} TL
-              </div>
-              <!-- Adet kontrol -->
-              <div class="d-flex align-items-center mt-1">
-                <button class="btn btn-sm btn-outline-secondary px-2 py-0" (click)="decreaseQuantity(item)">
+          <li *ngFor="let item of cartItems" class="dropdown-item">
+            <img [src]="getCartItemImage(item.product.productName)" 
+                 alt="{{ item.product.productName }}">
+            <div class="flex-grow-1 text-center">
+              <div class="product-name fw-semibold">{{ item.product.productName }}</div>
+              <div class="product-price text-muted">{{ item.product.unitPrice | number:'1.0-0' }} TL</div>
+              <div class="d-flex justify-content-center align-items-center mt-2">
+                <button class="btn btn-outline-secondary btn-qty" (click)="decreaseQuantity(item)">
                   <i class="bi bi-dash"></i>
                 </button>
-                <span class="mx-2">{{ item.quantity }}</span>
-                <button class="btn btn-sm btn-outline-secondary px-2 py-0" (click)="increaseQuantity(item)">
+                <span class="mx-2 quantity">{{ item.quantity }}</span>
+                <button class="btn btn-outline-secondary btn-qty" (click)="increaseQuantity(item)">
                   <i class="bi bi-plus"></i>
                 </button>
               </div>
             </div>
-
-            <!-- Silme butonu -->
-            <button class="btn btn-sm btn-outline-danger ms-2" (click)="removeFromCart(item)">
+            <button class="btn btn-outline-danger btn-sm btn-trash ms-2" (click)="removeFromCart(item)">
               <i class="bi bi-trash"></i>
             </button>
           </li>
 
-          <!-- Alt kısım: toplam -->
-          <li *ngIf="cartItems.length > 0" class="pt-2">
-            <div class="d-flex justify-content-between align-items-center px-2">
+          <!-- Alt kısım: toplam ve sepete git -->
+          <li *ngIf="cartItems.length > 0" class="pt-3 text-center border-top mt-2">
+            <div class="d-flex justify-content-between align-items-center mb-2 px-2">
               <strong>Toplam:</strong>
               <span class="fw-semibold">{{ getTotalPrice() | number:'1.0-0' }} TL</span>
             </div>
-            <a routerLink="/cart" class="btn btn-primary btn-sm w-100 mt-2" routerLink="/sepet">Sepete Git</a>
+            <a routerLink="/cart" class="btn btn-primary btn-sm w-100">Sepete Git</a>
           </li>
         </ul>
       </div>
+
     </div>
   </div>
 </nav>
